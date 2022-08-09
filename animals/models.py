@@ -5,7 +5,7 @@ from django.db import models
 class Sex_Options(models.TextChoices):
     FEMALE = "Femea"
     MALE = "Macho"
-    DEFAULT = "Não informada"
+    DEFAULT = "Não informado"
 
 class Animal(models.Model):
     name = models.CharField(max_length=50)
@@ -15,5 +15,5 @@ class Animal(models.Model):
 
     group = models.ForeignKey("groups.Group", on_delete=models.CASCADE, related_name="animals")
 
-    traits = models.ManyToManyField("traits.Trait")
+    traits = models.ManyToManyField("traits.Trait", related_name="animals")
 
