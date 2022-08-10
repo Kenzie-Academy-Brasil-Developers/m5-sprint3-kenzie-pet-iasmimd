@@ -1,1 +1,1 @@
-# Kenzie Pet
+![DER diagram](/assets//kenzie_pet_diagram.png)
