@@ -1,4 +1,6 @@
 from rest_framework import serializers
 
+
 class TraitSerializer(serializers.Serializer):
-    name = serializers.CharField() 
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField()

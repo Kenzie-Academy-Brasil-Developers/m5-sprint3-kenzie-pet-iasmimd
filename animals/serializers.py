@@ -8,25 +8,48 @@ from groups.serializers import GroupSerializer
 from traits.models import Trait
 from traits.serializers import TraitSerializer
 
+
 class AnimalSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
     age = serializers.IntegerField()
     weight = serializers.FloatField()
-    sex = serializers.ChoiceField(choices=Sex_Options.choices, default=Sex_Options.DEFAULT)
+    sex = serializers.ChoiceField(
+        choices=Sex_Options.choices, default=Sex_Options.DEFAULT
+    )
 
     group = GroupSerializer()
     traits = TraitSerializer(many=True)
 
-
     def create(self, validated_data: dict) -> Animal:
-        group = validated_data.pop('group')
-        traits = validated_data.pop('traits')
+        group = validated_data.pop("group")
+        traits = validated_data.pop("traits")
 
         group, _ = Group.objects.get_or_create(**group)
         animal = Animal.objects.create(**validated_data, group=group)
 
         for trait in traits:
-            c, _ = Trait.objects.get_or_create(**trait)
-            animal.traits.add(c)
+            t, _ = Trait.objects.get_or_create(**trait)
+            animal.traits.add(t)
 
         return animal
+
+    def update(self, instance: Animal, validated_data: dict) -> Animal:
+        forbidden_keys = (
+            "traits",
+            "group",
+            "sex",
+        )
+        # import ipdb
+
+        # ipdb.set_trace()
+
+        for key, value in validated_data.items():
+            if key in forbidden_keys:
+                raise KeyError(key)
+
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance
