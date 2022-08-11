@@ -1,3 +1,5 @@
+from numpy import log as ln
+
 from rest_framework import serializers
 
 from .models import Animal, Sex_Options
@@ -21,7 +23,13 @@ class AnimalSerializer(serializers.Serializer):
     group = GroupSerializer()
     traits = TraitSerializer(many=True)
 
-    human_age = serializers.IntegerField(read_only=True)
+    human_age = serializers.SerializerMethodField()
+
+
+    def get_human_age(self, obj):
+        dog_human_age = round(16 * ln(obj.age) + 31)
+        return dog_human_age
+
 
     def create(self, validated_data: dict) -> Animal:
         group = validated_data.pop("group")
@@ -42,9 +50,6 @@ class AnimalSerializer(serializers.Serializer):
             "group",
             "sex",
         )
-        # import ipdb
-
-        # ipdb.set_trace()
 
         for key, value in validated_data.items():
             if key in forbidden_keys:
