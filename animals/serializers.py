@@ -21,6 +21,8 @@ class AnimalSerializer(serializers.Serializer):
     group = GroupSerializer()
     traits = TraitSerializer(many=True)
 
+    human_age = serializers.IntegerField(read_only=True)
+
     def create(self, validated_data: dict) -> Animal:
         group = validated_data.pop("group")
         traits = validated_data.pop("traits")
