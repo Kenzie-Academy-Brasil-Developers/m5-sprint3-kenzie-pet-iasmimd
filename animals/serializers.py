@@ -25,11 +25,10 @@ class AnimalSerializer(serializers.Serializer):
 
     human_age = serializers.SerializerMethodField()
 
-
     def get_human_age(self, obj):
         dog_human_age = round(16 * ln(obj.age) + 31)
-        return dog_human_age
 
+        return dog_human_age
 
     def create(self, validated_data: dict) -> Animal:
         group = validated_data.pop("group")
