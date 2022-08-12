@@ -23,9 +23,9 @@ class AnimalSerializer(serializers.Serializer):
     group = GroupSerializer()
     traits = TraitSerializer(many=True)
 
-    human_age = serializers.SerializerMethodField()
+    age_in_pet_years = serializers.SerializerMethodField()
 
-    def get_human_age(self, obj):
+    def get_age_in_pet_years(self, obj):
         dog_human_age = round(16 * ln(obj.age) + 31)
 
         return dog_human_age
